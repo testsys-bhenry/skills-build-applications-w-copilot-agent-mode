@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './apiClient';
+import { fetchEndpoint } from './apiClient';
+
+const WORKOUTS_ENDPOINT = '/api/workouts/';
 
 function Workouts() {
   const [items, setItems] = useState([]);
@@ -9,7 +11,7 @@ function Workouts() {
   useEffect(() => {
     async function loadWorkouts() {
       try {
-        const data = await fetchCollection('workouts');
+        const data = await fetchEndpoint(WORKOUTS_ENDPOINT);
         setItems(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load workouts.');

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './apiClient';
+import { fetchEndpoint } from './apiClient';
+
+const LEADERBOARD_ENDPOINT = '/api/leaderboard/';
 
 function Leaderboard() {
   const [items, setItems] = useState([]);
@@ -9,7 +11,7 @@ function Leaderboard() {
   useEffect(() => {
     async function loadLeaderboard() {
       try {
-        const data = await fetchCollection('leaderboard');
+        const data = await fetchEndpoint(LEADERBOARD_ENDPOINT);
         setItems(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load leaderboard.');
