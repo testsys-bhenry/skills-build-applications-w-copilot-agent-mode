@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { fetchEndpoint } from './apiClient';
+import { apiOrigin, normalizeApiItems } from './apiClient';
 
-const ACTIVITIES_ENDPOINT = '/api/activities/';
+const ACTIVITIES_ENDPOINT = `${apiOrigin}/api/activities/`;
 
 function Activities() {
   const [items, setItems] = useState([]);
@@ -11,8 +11,13 @@ function Activities() {
   useEffect(() => {
     async function loadActivities() {
       try {
-        const data = await fetchEndpoint(ACTIVITIES_ENDPOINT);
-        setItems(data);
+        const response = await fetch(ACTIVITIES_ENDPOINT);
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const payload = await response.json();
+        setItems(normalizeApiItems(payload));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load activities.');
       } finally {

@@ -1,4 +1,19 @@
-const codespaceName = import.meta.env.VITE_CODESPACE_NAME;
+const configuredCodespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+
+function inferCodespaceNameFromHost() {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const { hostname } = window.location;
+  if (hostname.endsWith('-5173.app.github.dev')) {
+    return hostname.replace('-5173.app.github.dev', '');
+  }
+
+  return '';
+}
+
+const codespaceName = configuredCodespaceName || inferCodespaceNameFromHost();
 
 export const apiOrigin = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`

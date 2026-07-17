@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { fetchEndpoint } from './apiClient';
+import { apiOrigin, normalizeApiItems } from './apiClient';
 
-const TEAMS_ENDPOINT = '/api/teams/';
+const TEAMS_ENDPOINT = `${apiOrigin}/api/teams/`;
 
 function Teams() {
   const [items, setItems] = useState([]);
@@ -11,8 +11,13 @@ function Teams() {
   useEffect(() => {
     async function loadTeams() {
       try {
-        const data = await fetchEndpoint(TEAMS_ENDPOINT);
-        setItems(data);
+        const response = await fetch(TEAMS_ENDPOINT);
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const payload = await response.json();
+        setItems(normalizeApiItems(payload));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load teams.');
       } finally {
