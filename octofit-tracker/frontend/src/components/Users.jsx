@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { apiOrigin, normalizeApiItems } from './apiClient';
+import { fetchEndpoint } from './apiClient';
 
-const USERS_ENDPOINT = `${apiOrigin}/api/users/`;
+const USERS_ENDPOINT = '/api/users/';
 
 function Users() {
   const [items, setItems] = useState([]);
@@ -11,13 +11,7 @@ function Users() {
   useEffect(() => {
     async function loadUsers() {
       try {
-        const response = await fetch(USERS_ENDPOINT);
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const payload = await response.json();
-        setItems(normalizeApiItems(payload));
+        setItems(await fetchEndpoint(USERS_ENDPOINT));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load users.');
       } finally {

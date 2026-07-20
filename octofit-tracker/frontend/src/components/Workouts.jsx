@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { apiOrigin, normalizeApiItems } from './apiClient';
+import { fetchEndpoint } from './apiClient';
 
-const WORKOUTS_ENDPOINT = `${apiOrigin}/api/workouts/`;
+const WORKOUTS_ENDPOINT = '/api/workouts/';
 
 function Workouts() {
   const [items, setItems] = useState([]);
@@ -11,13 +11,7 @@ function Workouts() {
   useEffect(() => {
     async function loadWorkouts() {
       try {
-        const response = await fetch(WORKOUTS_ENDPOINT);
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const payload = await response.json();
-        setItems(normalizeApiItems(payload));
+        setItems(await fetchEndpoint(WORKOUTS_ENDPOINT));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load workouts.');
       } finally {

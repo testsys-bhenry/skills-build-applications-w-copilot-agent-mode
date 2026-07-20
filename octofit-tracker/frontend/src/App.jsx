@@ -4,7 +4,11 @@ import Leaderboard from './components/Leaderboard';
 import Teams from './components/Teams';
 import Users from './components/Users';
 import Workouts from './components/Workouts';
-import { apiBaseUrl } from './components/apiClient';
+import {
+  apiBaseUrl,
+  configuredCodespaceName,
+  isUsingFallbackOrigin,
+} from './components/apiClient';
 
 function App() {
   return (
@@ -15,7 +19,14 @@ function App() {
             <h1 className="h3 mb-1">OctoFit Tracker</h1>
             <p className="mb-0 small">React 19 presentation tier</p>
           </div>
-          <span className="badge text-bg-info">API: {apiBaseUrl}</span>
+          <div className="d-flex flex-column align-items-start align-items-md-end gap-1">
+            <span className="badge text-bg-info">API: {apiBaseUrl}</span>
+            <span className={`badge ${isUsingFallbackOrigin ? 'text-bg-warning' : 'text-bg-success'}`}>
+              {configuredCodespaceName
+                ? `VITE_CODESPACE_NAME=${configuredCodespaceName}`
+                : 'VITE_CODESPACE_NAME unset (localhost fallback)'}
+            </span>
+          </div>
         </div>
       </header>
 
@@ -52,6 +63,14 @@ function App() {
       </nav>
 
       <main>
+        {isUsingFallbackOrigin && (
+          <section className="container pt-3">
+            <div className="alert alert-warning mb-0" role="alert">
+              Define VITE_CODESPACE_NAME in frontend/.env.local to target
+              https://&lt;codespace&gt;-8000.app.github.dev API endpoints.
+            </div>
+          </section>
+        )}
         <Routes>
           <Route path="/" element={<Navigate to="/users" replace />} />
           <Route path="/users" element={<Users />} />

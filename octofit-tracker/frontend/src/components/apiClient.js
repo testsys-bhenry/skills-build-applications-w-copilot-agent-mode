@@ -1,4 +1,4 @@
-const configuredCodespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+export const configuredCodespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim() || '';
 
 function inferCodespaceNameFromHost() {
   if (typeof window === 'undefined') {
@@ -18,6 +18,8 @@ const codespaceName = configuredCodespaceName || inferCodespaceNameFromHost();
 export const apiOrigin = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : 'http://localhost:8000';
+
+export const isUsingFallbackOrigin = !codespaceName;
 
 export const apiBaseUrl = `${apiOrigin}/api`;
 

@@ -6,7 +6,7 @@ This React 19 app uses `react-router-dom` and loads backend resources from:
 
 ## Environment Variable
 
-Define `VITE_CODESPACE_NAME` in `octofit-tracker/frontend/.env.local`.
+`VITE_CODESPACE_NAME` must be defined in `octofit-tracker/frontend/.env.local` when running this frontend in Codespaces.
 
 Example:
 
@@ -16,7 +16,7 @@ VITE_CODESPACE_NAME=your-codespace-name
 
 ## Safe Fallback
 
-If `VITE_CODESPACE_NAME` is not set, the app falls back to:
+If `VITE_CODESPACE_NAME` is not set, the app safely falls back to:
 
 - `http://localhost:8000/api`
 
